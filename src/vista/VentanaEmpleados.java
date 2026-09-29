@@ -3,82 +3,100 @@ package vista;
 import controlador.EmpleadoControlador;
 import modelo.EmpleadoAdministrativo;
 import modelo.EmpleadoBase;
-
+import modelo.EmpleadoComercial;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class VentanaEmpleados extends JFrame {
-
     private final EmpleadoControlador controlador;
-
     private final JTextField txtCedula = new JTextField();
     private final JTextField txtNombre = new JTextField();
     private final JTextField txtSalario = new JTextField();
     private final JTextField txtBonificacion = new JTextField();
-
     private final JComboBox<String> cmbTipo =
-            new JComboBox<>(EmpleadoControlador.TIPOS_EMPLEADO);
-
-    private final JButton btnAgregar = new JButton("Agregar");
-    private final JButton btnBuscar = new JButton("Buscar");
-    private final JButton btnActualizar = new JButton("Actualizar");
-    private final JButton btnEliminar = new JButton("Eliminar");
-    private final JButton btnLimpiar = new JButton("Limpiar");
-    private final JButton btnHistorial = new JButton("Historial");
-
+            new JComboBox<>(
+                    EmpleadoControlador.TIPOS_EMPLEADO
+            );
+    private final JButton btnAgregar =
+            new JButton("Agregar");
+    private final JButton btnBuscar =
+            new JButton("Buscar");
+    private final JButton btnActualizar =
+            new JButton("Actualizar");
+    private final JButton btnEliminar =
+            new JButton("Eliminar");
+    private final JButton btnLimpiar =
+            new JButton("Limpiar");
+    private final JButton btnHistorial =
+            new JButton("Historial");
     private DefaultTableModel datosTabla;
-    private final JLabel lblResumen = new JLabel();
-
-    public VentanaEmpleados(EmpleadoControlador controlador) {
-
+    private final JLabel lblResumen =
+            new JLabel();
+    public VentanaEmpleados(
+            EmpleadoControlador controlador
+    ) {
         super("Sistema CRUD de Talento Humano");
-
         this.controlador = controlador;
-
-        setLayout(new BorderLayout(10, 10));
-
-        add(construirFormulario(), BorderLayout.NORTH);
-        add(construirTabla(), BorderLayout.CENTER);
-
-        lblResumen.setBorder(
-                BorderFactory.createEmptyBorder(0, 10, 10, 10)
+        setLayout(
+                new BorderLayout(10, 10)
         );
-
-        add(lblResumen, BorderLayout.SOUTH);
-
+        add(
+                construirFormulario(),
+                BorderLayout.NORTH
+        );
+        add(
+                construirTabla(),
+                BorderLayout.CENTER
+        );
+        lblResumen.setBorder(
+                BorderFactory.createEmptyBorder(
+                        0, 10, 10, 10
+                )
+        );
+        add(
+                lblResumen,
+                BorderLayout.SOUTH
+        );
         conectarEventos();
         refrescarTabla();
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(
+                JFrame.EXIT_ON_CLOSE
+        );
         setSize(780, 540);
         setLocationRelativeTo(null);
     }
-
     private JPanel construirFormulario() {
-
-        JPanel campos = new JPanel(
-                new GridLayout(5, 2, 8, 8)
+        JPanel campos =
+                new JPanel(
+                        new GridLayout(
+                                5, 2, 8, 8
+                        )
+                );
+        campos.add(
+                new JLabel("Cédula:")
         );
-
-        campos.add(new JLabel("Cédula:"));
         campos.add(txtCedula);
-
-        campos.add(new JLabel("Nombre completo:"));
+        campos.add(
+                new JLabel("Nombre completo:")
+        );
         campos.add(txtNombre);
-
-        campos.add(new JLabel("Salario base:"));
+        campos.add(
+                new JLabel("Salario base:")
+        );
         campos.add(txtSalario);
-
-        campos.add(new JLabel("Tipo de empleado:"));
+        campos.add(
+                new JLabel("Tipo de empleado:")
+        );
         campos.add(cmbTipo);
-
-        campos.add(new JLabel("Bonificación:"));
+        campos.add(
+                new JLabel(
+                        "Bonificación / Comisión %:"
+                )
+        );
         campos.add(txtBonificacion);
-
         txtBonificacion.setEnabled(false);
-
         JButton[] listaBotones = {
                 btnAgregar,
                 btnBuscar,
@@ -87,29 +105,35 @@ public class VentanaEmpleados extends JFrame {
                 btnLimpiar,
                 btnHistorial
         };
-
-        JPanel botones = new JPanel(new FlowLayout());
-
+        JPanel botones =
+                new JPanel(
+                        new FlowLayout()
+                );
         for (JButton boton : listaBotones) {
             botones.add(boton);
         }
-
-        JPanel panel = new JPanel(
-                new BorderLayout(10, 10)
-        );
-
+        JPanel panel =
+                new JPanel(
+                        new BorderLayout(
+                                10, 10
+                        )
+                );
         panel.setBorder(
-                BorderFactory.createEmptyBorder(10, 10, 0, 10)
+                BorderFactory.createEmptyBorder(
+                        10, 10, 0, 10
+                )
         );
-
-        panel.add(campos, BorderLayout.CENTER);
-        panel.add(botones, BorderLayout.SOUTH);
-
+        panel.add(
+                campos,
+                BorderLayout.CENTER
+        );
+        panel.add(
+                botones,
+                BorderLayout.SOUTH
+        );
         return panel;
     }
-
     private JScrollPane construirTabla() {
-
         String[] columnas = {
                 "Cédula",
                 "Nombre",
@@ -117,49 +141,47 @@ public class VentanaEmpleados extends JFrame {
                 "Salario base",
                 "Salario total"
         };
-
-        datosTabla = new DefaultTableModel(columnas, 0) {
-
-            @Override
-            public boolean isCellEditable(
-                    int fila,
-                    int columna
-            ) {
-                return false;
-            }
-        };
-
-        JTable tabla = new JTable(datosTabla);
-
-        JScrollPane scroll = new JScrollPane(tabla);
-
+        datosTabla =
+                new DefaultTableModel(
+                        columnas,
+                        0
+                ) {
+                    @Override
+                    public boolean isCellEditable(
+                            int fila,
+                            int columna
+                    ) {
+                        return false;
+                    }
+                };
+        JTable tabla =
+                new JTable(datosTabla);
+        JScrollPane scroll =
+                new JScrollPane(tabla);
         scroll.setBorder(
                 BorderFactory.createTitledBorder(
                         "Empleados registrados"
                 )
         );
-
         return scroll;
     }
-
     private void refrescarTabla() {
-
         datosTabla.setRowCount(0);
-
         for (EmpleadoBase empleado :
                 controlador.obtenerEmpleados()) {
-
             Object[] fila = {
                     empleado.getCedula(),
                     empleado.getNombre(),
                     empleado.getTipo(),
-                    formatoPesos(empleado.getSalarioBase()),
-                    formatoPesos(empleado.calcularSalarioTotal())
+                    formatoPesos(
+                            empleado.getSalarioBase()
+                    ),
+                    formatoPesos(
+                            empleado.calcularSalarioTotal()
+                    )
             };
-
             datosTabla.addRow(fila);
         }
-
         lblResumen.setText(
                 "Empleados: "
                         + datosTabla.getRowCount()
@@ -169,28 +191,28 @@ public class VentanaEmpleados extends JFrame {
                 )
         );
     }
-
-    private String formatoPesos(double valor) {
-
-        return String.format("$ %,.0f", valor);
+    private String formatoPesos(
+            double valor
+    ) {
+        return String.format(
+                "$ %,.0f",
+                valor
+        );
     }
-
     private void conectarEventos() {
-
         cmbTipo.addActionListener(e -> {
-
-            boolean esAdministrativo =
-                    tipoSeleccionado().equals("Administrativo");
-
+            boolean requiereDato =
+                    tipoSeleccionado()
+                            .equals("Administrativo")
+                            || tipoSeleccionado()
+                            .equals("Comercial");
             txtBonificacion.setEnabled(
-                    esAdministrativo
+                    requiereDato
             );
-
-            if (!esAdministrativo) {
+            if (!requiereDato) {
                 txtBonificacion.setText("");
             }
         });
-
         btnAgregar.addActionListener(e ->
                 mostrarResultado(
                         controlador.agregarEmpleado(
@@ -202,7 +224,6 @@ public class VentanaEmpleados extends JFrame {
                         )
                 )
         );
-
         btnActualizar.addActionListener(e ->
                 mostrarResultado(
                         controlador.actualizarEmpleado(
@@ -214,153 +235,142 @@ public class VentanaEmpleados extends JFrame {
                         )
                 )
         );
-
-        btnBuscar.addActionListener(e -> buscar());
-
-        btnEliminar.addActionListener(e -> eliminar());
-
-        btnLimpiar.addActionListener(e -> limpiarFormulario());
-
-        btnHistorial.addActionListener(e -> mostrarHistorial());
+        btnBuscar.addActionListener(
+                e -> buscar()
+        );
+        btnEliminar.addActionListener(
+                e -> eliminar()
+        );
+        btnLimpiar.addActionListener(
+                e -> limpiarFormulario()
+        );
+        btnHistorial.addActionListener(
+                e -> mostrarHistorial()
+        );
     }
-
-    private void mostrarResultado(String mensaje) {
-
+    private void mostrarResultado(
+            String mensaje
+    ) {
         JOptionPane.showMessageDialog(
                 this,
                 mensaje
         );
-
         refrescarTabla();
     }
-
     private void buscar() {
-
-        String cedula = texto(txtCedula);
-
+        String cedula =
+                texto(txtCedula);
         if (cedula.isEmpty()) {
-
             JOptionPane.showMessageDialog(
                     this,
                     "Escribe una cédula para buscar."
             );
-
             return;
         }
-
         EmpleadoBase empleado =
-                controlador.buscarEmpleado(cedula);
-
+                controlador.buscarEmpleado(
+                        cedula
+                );
         if (empleado == null) {
-
             JOptionPane.showMessageDialog(
                     this,
-                    "No se encontró ningún empleado con la cédula "
+                    "No se encontró ningún empleado "
+                            + "con la cédula "
                             + cedula + "."
             );
-
             return;
         }
-
         txtNombre.setText(
                 empleado.getNombre()
         );
-
         txtSalario.setText(
                 String.format(
                         "%.0f",
                         empleado.getSalarioBase()
                 )
         );
-
         cmbTipo.setSelectedItem(
                 empleado.getTipo()
         );
-
         if (empleado instanceof EmpleadoAdministrativo) {
-
             EmpleadoAdministrativo administrativo =
                     (EmpleadoAdministrativo) empleado;
-
             txtBonificacion.setText(
                     String.format(
                             "%.0f",
                             administrativo.getBonificacion()
                     )
             );
+        } else if (
+                empleado instanceof EmpleadoComercial
+        ) {
+            EmpleadoComercial comercial =
+                    (EmpleadoComercial) empleado;
+            txtBonificacion.setText(
+                    String.format(
+                            "%.0f",
+                            comercial.getPorcentajeComision()
+                    )
+            );
         }
     }
-
     private void eliminar() {
-
-        String cedula = texto(txtCedula);
-
+        String cedula =
+                texto(txtCedula);
         if (cedula.isEmpty()) {
-
             JOptionPane.showMessageDialog(
                     this,
                     "Escribe una cédula para eliminar."
             );
-
             return;
         }
-
-        int respuesta = JOptionPane.showConfirmDialog(
-                this,
-                "¿Seguro que deseas eliminar al empleado con cédula "
-                        + cedula + "?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (respuesta == JOptionPane.YES_OPTION) {
-
+        int respuesta =
+                JOptionPane.showConfirmDialog(
+                        this,
+                        "¿Seguro que deseas eliminar "
+                                + "al empleado con cédula "
+                                + cedula + "?",
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION
+                );
+        if (respuesta ==
+                JOptionPane.YES_OPTION) {
             mostrarResultado(
-                    controlador.eliminarEmpleado(cedula)
+                    controlador.eliminarEmpleado(
+                            cedula
+                    )
             );
-
             limpiarFormulario();
         }
     }
-
     private void limpiarFormulario() {
-
         txtCedula.setText("");
         txtNombre.setText("");
         txtSalario.setText("");
         txtBonificacion.setText("");
-
         cmbTipo.setSelectedIndex(0);
-
         txtCedula.requestFocus();
     }
-
     private void mostrarHistorial() {
-
         ArrayList<String> historial =
                 controlador.obtenerHistorial();
-
         if (historial.isEmpty()) {
-
             JOptionPane.showMessageDialog(
                     this,
                     "Aún no hay operaciones registradas."
             );
-
             return;
         }
-
         StringBuilder texto =
                 new StringBuilder();
-
-        for (int i = 0; i < historial.size(); i++) {
-
+        for (int i = 0;
+             i < historial.size();
+             i++) {
             texto.append(i + 1)
                     .append(". ")
                     .append(historial.get(i))
                     .append("\n");
         }
-
         JOptionPane.showMessageDialog(
                 this,
                 texto.toString(),
@@ -368,14 +378,13 @@ public class VentanaEmpleados extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE
         );
     }
-
-    private String texto(JTextField campo) {
-
+    private String texto(
+            JTextField campo
+    ) {
         return campo.getText().trim();
     }
-
     private String tipoSeleccionado() {
-
-        return (String) cmbTipo.getSelectedItem();
+        return (String)
+                cmbTipo.getSelectedItem();
     }
 }
